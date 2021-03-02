@@ -2,6 +2,7 @@ import React from "react";
 import Title from "./components/Title"
 import TodoList from "./components/TodoList";
 import faker from 'faker'
+import CommentsList from "./components/CommentsList";
 
 function App() {
 
@@ -19,7 +20,8 @@ function App() {
   return (
     <div className="app">
       <Title texto="Mi primera React App" />
-      <TodoList lista = {todoList}></TodoList>
+      {/* <TodoList lista = {todoList}></TodoList> */}
+      <CommentsList></CommentsList>
     </div>
   )
 }
