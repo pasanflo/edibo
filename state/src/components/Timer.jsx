@@ -13,7 +13,7 @@ class Timer extends React.Component {
     // newstate = {...oldstate, ...prop}
 
     componentDidMount(){
-        console.log("timer está montado")
+        // console.log("timer está montado")
         // programo una función que se ejecuta cada segundo
         setInterval(() => {
             // console.log("nuevo segundo")
@@ -26,19 +26,19 @@ class Timer extends React.Component {
         }, 1000);
     }
 
-    componentWillMount() {
-        console.log("componente se montará")
-    }
+    // componentWillMount() {
+    //     // console.log("componente se montará")
+    // }
    
     render() {
-        console.log("render")
+        // console.log("render")
         return (
             // <h1>{ahora.getHours()} : {ahora.getMinutes()}</h1>
             <div className="timer">
                 <h1>{`${this.state.ahora.getHours()} : 
                     ${this.state.ahora.getMinutes()} : 
                     ${this.state.ahora.getSeconds()}`}</h1>
-                <h2>{this.state.ahora.toLocaleDateString()}</h2>
+                {/* <h2>{this.state.ahora.toLocaleDateString()}</h2> */}
             </div>
         )
     }
