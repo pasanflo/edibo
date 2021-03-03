@@ -1,27 +1,43 @@
 import React from "react";
 import faker from 'faker'
 
-const CommentsList = (props) => {
+
+const CommentsItem = props => {
+
+  //const {comment} = props;
+  const comment = props.comment;
+
+  return (
+    <div className="comment">
+    <a className="avatar">
+      <img src={comment.avatar} />
+    </a>
+    <div className="content">
+      <a className="author">{comment.name}</a>
+      <div className="metadata">
+        <span className="date">{comment.date.toLocaleDateString()}</span>
+      </div>
+      <div className="text">{comment.comment}</div>
+    </div>
+  </div>
+  )
+}
+
+
+const CommentsList = props => {
+
+  //props.comments
+
+
   return (
     <div className="comments-list">
       <div className="ui comments">
         <h3 className="ui dividing header">Comments</h3>
-
-
-        <div className="comment">
-          <a className="avatar">
-            <img src={faker.image.avatar()} />
-          </a>
-          <div className="content">
-            <a className="author">Matt</a>
-            <div className="metadata">
-              <span className="date">Today at 5:42PM</span>
-            </div>
-            <div className="text">How artistic!</div>
-          </div>
-        </div>
-      
-      
+        {
+          props.comments.map(
+            i => <CommentsItem comment={i}/>
+          )
+        }
       </div>
     </div>
   );

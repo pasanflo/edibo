@@ -1,7 +1,7 @@
 import React from "react";
 import Title from "./components/Title"
 import TodoList from "./components/TodoList";
-import faker from 'faker'
+import faker, { image } from 'faker'
 import CommentsList from "./components/CommentsList";
 
 function App() {
@@ -17,11 +17,24 @@ function App() {
     )    
   }
 
+  const comments = []
+
+  for (let index = 0; index < 40; index++) {
+    comments.push(
+      {
+        avatar: image.people(),
+        name: faker.name.firstName(),
+        date: faker.date.past(),
+        comment: faker.lorem.sentence()
+      }
+    )    
+  }
+
   return (
     <div className="app">
       <Title texto="Mi primera React App" />
       {/* <TodoList lista = {todoList}></TodoList> */}
-      <CommentsList></CommentsList>
+      <CommentsList comments={comments}></CommentsList>
     </div>
   )
 }
