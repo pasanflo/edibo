@@ -25,7 +25,7 @@ export class TodoList extends Component {
   }
 
   // Click Handler
-  onBtnClicked = () => {
+  addTodo = () => {
     // Crear un nuevo todo object
     const newTodoObject = {
       todo: this.state.newTodo,
@@ -111,7 +111,7 @@ export class TodoList extends Component {
           onChange={(e) => this.onChangeInput(e)}
           value={this.state.newTodo}
         ></input>
-        <button onClick={this.onBtnClicked}>Grabar</button>
+        <button onClick={this.addTodo}>Grabar</button>
       </div>
     );
   }
