@@ -1,0 +1,34 @@
+{
+  "todos": [
+    {
+      "id": 1,
+      "todo": "hacer la cena",
+      "author": "typicode",
+      "done": false
+    },
+    {
+      "id": 2,
+      "todo": "dormir",
+      "author": "alfonso",
+      "done": true
+    },
+    {
+      "todo": "afdsadf",
+      "author": "alfonso",
+      "done": false,
+      "id": 3
+    },
+    {
+      "todo": "asfdasdf",
+      "author": "alfonso",
+      "done": false,
+      "id": 4
+    },
+    {
+      "todo": "asfdasdfadfsadf",
+      "author": "alfonso",
+      "done": false,
+      "id": 5
+    }
+  ]
+}

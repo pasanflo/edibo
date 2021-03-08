@@ -15,6 +15,7 @@ export class TodoList extends Component {
     axios
       .get("http://localhost:8000/todos")
       .then((res) => {
+        // actualizar el estado con los datos datos que nos hemos traido
         this.setState({
           todos: res.data,
         });
@@ -28,6 +29,7 @@ export class TodoList extends Component {
       author: "pablo",
       done: false,
     };
+    // Enviarlo por post al servidor (crear elemento)
     axios
       .post("http://localhost:8000/todos", newTodoObject)
       .then(
@@ -36,18 +38,7 @@ export class TodoList extends Component {
         })
       )
       .catch(console.error);
-  };
 
-  onDeleted = (item) => {
-    
-    axios
-      .delete("http://localhost:8000/todos/"+item.id)
-      .then(
-        _res => this.setState({
-          todos: this.state.todos.filter(x => { return x.id !== item.id }),
-        })
-      )
-      .catch(console.error);
   };
 
   onChangeInput = (e) => {
@@ -56,6 +47,45 @@ export class TodoList extends Component {
     });
   };
 
+  borrarElemento = (id) => {
+    axios.delete(`http://localhost:8000/todos/${id}`).then(
+      this.setState(
+        {
+          todos: this.state.todos.filter(i => i.id !== id)
+        }
+      )
+    )
+  }
+
+  terminarTodo = id => {
+    const todo = this.state.todos.find(i => i.id == id)
+    todo.done = true
+    console.log(todo)
+    // Modificamos el elemento en base de datos 
+    axios.put(
+      `http://localhost:8000/todos/${id}`,
+      todo
+    ).then(
+      // Modificar el todo en nuestro estado
+      res => {
+        // const todo = res.data;
+        // const nuevosTodos = this.state.todos.filter(i => i.id != todo.id);
+        // nuevosTodos.push(todo)
+        // this.setState({
+        //   todos: nuevosTodos
+        // })
+
+        this.setState(
+          {
+            todos: [...this.state.todos.filter(i => i.id != todo.id), res.data]
+          }
+        )
+      }
+    ).catch(
+      console.error
+    )
+  }
+
   render() {
     const { todos } = this.state;
 
@@ -63,19 +93,20 @@ export class TodoList extends Component {
       <div className="todo-list">
         <ul>
           {todos.map((i) => (
-            <div>
-              <li key={i.id}>{i.todo}</li>
-              <button key={"delete"+i.id} onClick={_ => this.onDeleted(i)}>Borrar</button>
-            </div>
+            <li key={i.id}>
+              {i.todo}
+              {i.done ? " Hecho " : " Pendiente "}
+              <button onClick={() => this.borrarElemento(i.id)}>Borrar</button>
+              {!i.done && <button onClick={() => this.terminarTodo(i.id)} >Terminar</button>}
+            </li>
           ))}
         </ul>
-
         <input
           type="text"
           onChange={(e) => this.onChangeInput(e)}
           value={this.state.newTodo}
         ></input>
-        <button onClick={this.onCreated}>Grabar</button>
+        <button onClick={this.addTodo}>Grabar</button>
       </div>
     );
   }

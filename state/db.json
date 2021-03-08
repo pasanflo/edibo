@@ -10,30 +10,12 @@
       "id": 2,
       "todo": "dormir",
       "author": "alfonso",
-      "done": false
-    },
-    {
-      "todo": "SALIR A COMPRAR",
-      "author": "alfonso",
-      "done": false,
-      "id": 3
-    },
-    {
-      "todo": "SALIR A CORRER",
-      "author": "alfonso",
-      "done": false,
-      "id": 4
-    },
-    {
-      "todo": "SALIR A KSDAFJ",
-      "author": "alfonso",
-      "done": false,
-      "id": 5
+      "done": true
     },
     {
       "todo": "SFDASF",
-      "author": "alfonso",
-      "done": false,
+      "author": "",
+      "done": true,
       "id": 6
     }
   ]
