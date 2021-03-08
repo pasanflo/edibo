@@ -4,7 +4,6 @@ import axios from "axios";
 export class TodoList extends Component {
   constructor(props) {
     super(props);
-    // inicializamos el estado con los todos
     this.state = {
       todos: [],
       newTodo: "",
@@ -13,13 +12,9 @@ export class TodoList extends Component {
 
 
   componentDidMount() {
-    console.log("did mount");
-    // ir a por los datos
     axios
       .get("http://localhost:8000/todos")
       .then((res) => {
-        // actualizar el estado con los datos datos que nos hemos traido
-        console.log(res.data);
         this.setState({
           todos: res.data,
         });
@@ -27,12 +22,10 @@ export class TodoList extends Component {
       .catch((err) => console.error(err));
   }
 
-  // Click Handler
-  onBtnClicked = () => {
-    // Crear un nuevo todo object
+  onCreated = () => {
     const newTodoObject = {
       todo: this.state.newTodo,
-      author: "alfonso",
+      author: "pablo",
       done: false,
     };
     axios
@@ -41,20 +34,20 @@ export class TodoList extends Component {
         res => this.setState({
           todos: [...this.state.todos, res.data],
         })
-
-        // res => {
-        //     const nuevoarray = [...this.state.todos]
-        //     nuevoarray.push(res.data)
-        //     this.setState(
-        //         {
-        //             todos: nuevoarray
-        //         }
-        //     )
-        // }
       )
       .catch(console.error);
+  };
 
-    // Enviarlo por post al servidor
+  onDeleted = (item) => {
+    
+    axios
+      .delete("http://localhost:8000/todos/"+item.id)
+      .then(
+        _res => this.setState({
+          todos: this.state.todos.filter(x => { return x.id !== item.id }),
+        })
+      )
+      .catch(console.error);
   };
 
   onChangeInput = (e) => {
@@ -64,15 +57,16 @@ export class TodoList extends Component {
   };
 
   render() {
-    console.log("render");
-
     const { todos } = this.state;
 
     return (
       <div className="todo-list">
         <ul>
           {todos.map((i) => (
-            <li key={i.id}>{i.todo}</li>
+            <div>
+              <li key={i.id}>{i.todo}</li>
+              <button key={"delete"+i.id} onClick={_ => this.onDeleted(i)}>Borrar</button>
+            </div>
           ))}
         </ul>
 
@@ -81,7 +75,7 @@ export class TodoList extends Component {
           onChange={(e) => this.onChangeInput(e)}
           value={this.state.newTodo}
         ></input>
-        <button onClick={this.onBtnClicked}>Grabar</button>
+        <button onClick={this.onCreated}>Grabar</button>
       </div>
     );
   }
