@@ -12,7 +12,7 @@ class TodoForm extends Component {
   createTodo = () => {
     const newTodoObject = {
       todo: this.state.newTodo,
-      author: "alfonso",
+      author: "pasanflo",
       done: false,
     };
     axios

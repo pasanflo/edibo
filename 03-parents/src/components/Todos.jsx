@@ -14,7 +14,18 @@ class Todos extends Component {
 
   addTodo = (todo) => {
     this.setState({
-        todos: [...this.state.todos, todo]
+      todos: [...this.state.todos, todo]
+    })
+  }
+
+  doCheck = (todo) => {
+    this.setState({
+      todos: [...this.state.todos.filter(x => {
+        return x.id !== todo.id
+      }), todo]
+    })
+    this.setState({
+      todos: [...this.state.todos.sort((a, b) => a.id - b.id)]
     })
   }
 
@@ -32,7 +43,7 @@ class Todos extends Component {
   render() {
     return (
       <div className="todos">
-        <TodoList todos={this.state.todos} ></TodoList>
+        <TodoList todos={this.state.todos} doCheck={this.doCheck}></TodoList>
         <TodoForm addTodo={this.addTodo}></TodoForm>
       </div>
     );
