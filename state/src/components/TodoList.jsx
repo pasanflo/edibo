@@ -6,7 +6,9 @@ export class TodoList extends Component {
     super(props);
     this.state = {
       todos: [],
-      newTodo: "",
+      inputValue: "",
+      modifiedItem: null,
+      isNew: true,
     };
   }
 
@@ -15,9 +17,8 @@ export class TodoList extends Component {
     axios
       .get("http://localhost:8000/todos")
       .then((res) => {
-        // actualizar el estado con los datos datos que nos hemos traido
         this.setState({
-          todos: res.data,
+          todos: res.data.sort((a, b) => a.id - b.id),
         });
       })
       .catch((err) => console.error(err));
@@ -25,7 +26,7 @@ export class TodoList extends Component {
 
   onCreated = () => {
     const newTodoObject = {
-      todo: this.state.newTodo,
+      todo: this.state.inputValue,
       author: "pablo",
       done: false,
     };
@@ -34,16 +35,37 @@ export class TodoList extends Component {
       .post("http://localhost:8000/todos", newTodoObject)
       .then(
         res => this.setState({
-          todos: [...this.state.todos, res.data],
+          todos: [...this.state.todos, res.data].sort((a, b) => a.id - b.id),
         })
       )
       .catch(console.error);
 
   };
 
+  updateTodo = (todo) => {
+    const modifiedObj = {
+      id: todo.id,
+      todo: this.state.inputValue,
+      author: todo.author,
+      done: todo.done,
+    };
+
+    axios
+      .patch(`http://localhost:8000/todos/${todo.id}`, modifiedObj)
+      .then(
+        res => this.setState({
+          todos: [...this.state.todos.filter(x => x.id !== modifiedObj.id), res.data].sort((a, b) => a.id - b.id),
+          isNew: true,
+          modifiedItem: null,
+          inputValue: '',
+        })
+      )
+      .catch(console.error);
+  };
+
   onChangeInput = (e) => {
     this.setState({
-      newTodo: e.target.value.toUpperCase(),
+      inputValue: e.target.value
     });
   };
 
@@ -51,39 +73,38 @@ export class TodoList extends Component {
     axios.delete(`http://localhost:8000/todos/${id}`).then(
       this.setState(
         {
-          todos: this.state.todos.filter(i => i.id !== id)
+          todos: this.state.todos.filter(i => i.id !== id).sort((a, b) => a.id - b.id)
         }
       )
     )
   }
 
   terminarTodo = id => {
-    const todo = this.state.todos.find(i => i.id == id)
+    const todo = this.state.todos.find(i => i.id === id)
     todo.done = true
-    console.log(todo)
-    // Modificamos el elemento en base de datos 
+
     axios.put(
       `http://localhost:8000/todos/${id}`,
       todo
     ).then(
-      // Modificar el todo en nuestro estado
       res => {
-        // const todo = res.data;
-        // const nuevosTodos = this.state.todos.filter(i => i.id != todo.id);
-        // nuevosTodos.push(todo)
-        // this.setState({
-        //   todos: nuevosTodos
-        // })
-
         this.setState(
           {
-            todos: [...this.state.todos.filter(i => i.id != todo.id), res.data]
+            todos: [...this.state.todos.filter(i => i.id !== todo.id), res.data]
           }
         )
       }
     ).catch(
-      console.error
+      console.error("Couldn't set TODOs")
     )
+  }
+
+  update = (todo) => {
+    this.setState({
+      isNew: false,
+      modifiedItem: todo,
+      inputValue: todo.todo
+    })
   }
 
   render() {
@@ -97,6 +118,7 @@ export class TodoList extends Component {
               {i.todo}
               {i.done ? " Hecho " : " Pendiente "}
               <button onClick={() => this.borrarElemento(i.id)}>Borrar</button>
+              <button onClick={() => this.update(i)}>Modificar</button>
               {!i.done && <button onClick={() => this.terminarTodo(i.id)} >Terminar</button>}
             </li>
           ))}
@@ -104,9 +126,16 @@ export class TodoList extends Component {
         <input
           type="text"
           onChange={(e) => this.onChangeInput(e)}
-          value={this.state.newTodo}
+          value={this.state.inputValue}
         ></input>
-        <button onClick={this.addTodo}>Grabar</button>
+        {this.state.isNew
+          ? <button onClick={this.onCreated}>
+            Añadir
+          </button>
+          : <button onClick={() => this.updateTodo(this.state.modifiedItem)}>
+            Modificar
+          </button>}
+
       </div>
     );
   }
