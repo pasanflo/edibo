@@ -135,7 +135,6 @@ export class TodoList extends Component {
           : <button onClick={() => this.updateTodo(this.state.modifiedItem)}>
             Modificar
           </button>}
-
       </div>
     );
   }

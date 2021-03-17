@@ -10,11 +10,8 @@ class Timer extends React.Component {
     }
   }
 
-  // newstate = {...oldstate, ...prop}
-
   componentDidMount() {
-    // console.log("timer está montado")
-    // programo una función que se ejecuta cada segundo
+
     setInterval(() => {
       this.setState(
         {
